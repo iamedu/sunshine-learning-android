@@ -11,8 +11,6 @@ import android.widget.TextView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import org.w3c.dom.Text;
-
 
 /**
  * {@link ForecastAdapter} exposes a list of weather forecasts
@@ -43,9 +41,17 @@ public class ForecastAdapter extends CursorAdapter {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
         // Read weather icon ID from cursor
-        int weatherId = cursor.getInt(ForecastFragment.COL_WEATHER_ID);
+        int weatherId = cursor.getInt(ForecastFragment.COL_WEATHER_STATE_ID);
         // Use placeholder image for now
-        viewHolder.iconView.setImageResource(R.drawable.ic_launcher);
+        int viewType = getItemViewType(cursor.getPosition());
+        int imageResource = -1;
+        if(viewType == VIEW_TYPE_TODAY) {
+            imageResource = Utility.getArtResourceForWeatherCondition(weatherId);
+        } else if(viewType == VIEW_TYPE_FUTURE_DAY) {
+            imageResource =Utility.getIconResourceForWeatherCondition(weatherId);
+        }
+
+        viewHolder.iconView.setImageResource(imageResource);
 
         // Read date from cursor
         String dateString = cursor.getString(ForecastFragment.COL_WEATHER_DATE);
@@ -67,6 +73,7 @@ public class ForecastAdapter extends CursorAdapter {
         // Read low temperature from cursor
         float low = cursor.getFloat(ForecastFragment.COL_WEATHER_MIN_TEMP);
         viewHolder.lowTempView.setText(Utility.formatTemperature(context, cursor.getDouble(ForecastFragment.COL_WEATHER_MIN_TEMP), isMetric));
+
     }
 
     @Override
