@@ -213,8 +213,8 @@ public class ForecastFragment extends Fragment {
          */
         private String formatHighLows(double high, double low) {
             // For presentation, assume the user doesn't care about tenths of a degree.
-            long roundedHigh = Math.round(high);
-            long roundedLow = Math.round(low);
+            long roundedHigh = Math.round(high / 10);
+            long roundedLow = Math.round(low / 10);
 
             String highLowStr = roundedHigh + "/" + roundedLow;
             return highLowStr;
